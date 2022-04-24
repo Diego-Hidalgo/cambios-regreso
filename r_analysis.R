@@ -18,8 +18,8 @@ library(descr)
 library(openxlsx)
 library(PASWR2)
 
-#dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
-dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
+dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
+#dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
 #Tiempo de Desplazamiento a la Universidad
@@ -58,7 +58,7 @@ boxplot.stats(expenses_v$col)$out
 
 my_mean = mean(expenses_v$col, na.rm = TRUE)
 
-expernses_v_wa <- replace(expenses_v, expenses_v >= 8000,my_mean)
+expernses_v_wa <- replace(expenses_v, expenses_v >= 8000, my_mean)
 
 boxplot(expernses_v_wa$col)
 
@@ -82,16 +82,16 @@ expenses_p <- read_excel(path = dataPath,
                          col_types = "numeric",
                          col_names = "col")
 boxplot(expenses_p$col)
-boxplot.stats(expenses_p$col)$out
+out_values <- boxplot.stats(expenses_p$col)$out
 
 my_mean = mean(expenses_p$col, na.rm = TRUE)
 
-expernses_p_wa <- replace(expenses_p, expenses_p >= 45000,my_mean)
+expernses_p_wa <- replace(expenses_p, expenses_p >= 45000, my_mean)
 
 boxplot(expernses_p_wa$col)
 
-
 my_mean = mean(expernses_p_wa$col, na.rm = TRUE)
+my_mean
 
 my_t <- t.test(expernses_p_wa$col, mu = my_mean)
 my_t
@@ -117,7 +117,7 @@ boxplot.stats(hobbies_v$col)$out
 
 my_mean = mean(hobbies_v$col, na.rm = TRUE)
 
-hobbies_v_wa <- replace(hobbies_v, hobbies_v >= 220,my_mean)
+hobbies_v_wa <- replace(hobbies_v, hobbies_v >= 220, my_mean)
 
 boxplot(hobbies_v_wa$col)
 
@@ -142,7 +142,18 @@ hobbies_p <- read_excel(path = dataPath,
                         col_types = "numeric",
                         col_names = "col")
 
+boxplot(hobbies_p$col)
+out_values = boxplot.stats(hobbies_p$col)$out
+
 my_mean <- mean(hobbies_p$col, na.rm = TRUE)
+my_mean
+
+hobbies_p$col <- remove_atypical(hobbies_p$col, out_values, my_mean)
+
+my_mean <- mean(hobbies_p$col, na.rm = TRUE)
+my_mean
+
+boxplot(hobbies_p$col)
 
 my_t <- t.test(hobbies_p$col, mu = my_mean)
 my_t
@@ -156,5 +167,18 @@ if(p_value <= 0.05) {
   paste("No rechazar H0: media igual a ", my_mean)
 }
 
+#Functions
+remove_atypical <- function(explore, out_values, mu) {
+  i = 1
+  n = length(explore)
+  while(i <= n)
+  {
+    if(explore[i] %in% out_values){
+      explore <- replace(explore, i, mu)
+    }
+    i = i +1
+  }
+  return(explore)
+}
 
 
