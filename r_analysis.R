@@ -62,8 +62,8 @@ expernses_v_wa <- replace(expenses_v, expenses_v >= 8000,my_mean)
 
 boxplot(expernses_v_wa$col)
 
-
-my_t <- t.test(expenses_v$col, mu = my_mean)
+my_mean = mean(expernses_v_wa$col, na.rm = TRUE)
+my_t <- t.test(expernses_v_wa$col, mu = my_mean)
 my_t
 
 p_value <- my_t$p.value
@@ -81,10 +81,19 @@ expenses_p <- read_excel(path = dataPath,
                          range = "I2:I314",
                          col_types = "numeric",
                          col_names = "col")
+boxplot(expenses_p$col)
+boxplot.stats(expenses_p$col)$out
 
-my_mean = mean(expense_p$col, na.rm = TRUE)
+my_mean = mean(expenses_p$col, na.rm = TRUE)
 
-my_t <- t.test(expenses_p$col, mu = my_mean)
+expernses_p_wa <- replace(expenses_p, expenses_p >= 45000,my_mean)
+
+boxplot(expernses_p_wa$col)
+
+
+my_mean = mean(expernses_p_wa$col, na.rm = TRUE)
+
+my_t <- t.test(expernses_p_wa$col, mu = my_mean)
 my_t
 
 p_value <- my_t$p.value
