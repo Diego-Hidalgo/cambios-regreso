@@ -112,9 +112,18 @@ hobbies_v <- read_excel(path = dataPath,
                         col_types = "numeric",
                         col_names = "col")
 
+boxplot(hobbies_v$col)
+boxplot.stats(hobbies_v$col)$out
+
 my_mean = mean(hobbies_v$col, na.rm = TRUE)
 
-my_t <- t.test(hobbies_v$col, mu = my_mean)
+hobbies_v_wa <- replace(hobbies_v, hobbies_v >= 220,my_mean)
+
+boxplot(hobbies_v_wa$col)
+
+my_mean = mean(hobbies_v_wa$col, na.rm = TRUE)
+
+my_t <- t.test(hobbies_v_wa$col, mu = my_mean)
 my_t
 
 p_value <- my_t$p.value
