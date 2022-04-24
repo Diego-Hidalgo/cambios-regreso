@@ -17,10 +17,9 @@ library(lattice)
 library(descr)
 library(openxlsx)
 library(PASWR2)
-library(here)
 
-#dataPath <- here("cambios-regreso","proyecto_it.xlsx")
 dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
+#dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
 #Tiempo de Desplazamiento a la Universidad
