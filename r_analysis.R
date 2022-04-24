@@ -17,8 +17,10 @@ library(lattice)
 library(descr)
 library(openxlsx)
 library(PASWR2)
+library(here)
 
-dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/proyecto_it.xlsx"
+
+dataPath <- here("inst","cambios-regreso","proyecto_it.xlsx")
 
 dataSheet <- "Datos"
 
