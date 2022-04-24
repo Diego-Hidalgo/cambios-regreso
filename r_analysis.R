@@ -19,7 +19,7 @@ library(openxlsx)
 library(PASWR2)
 library(here)
 
-dataPath <- here("inst","cambios-regreso","proyecto_it.xlsx")
+dataPath <- read_excel("D:/workspace/cambios-regreso/proyecto_it.xlsx")
 dataSheet <- "Datos"
 
 #Tiempo de Desplazamiento a la Universidad
