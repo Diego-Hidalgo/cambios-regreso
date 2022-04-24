@@ -18,8 +18,8 @@ library(descr)
 library(openxlsx)
 library(PASWR2)
 
-#dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
-dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
+dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
+#dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
 #Tiempo de Desplazamiento a la Universidad
@@ -33,7 +33,7 @@ boxplot(time_u$col)
 
 my_mean = mean(time_u$col, na.rm = TRUE)
 
-hypothesis_t(time_u$col,my_mean,"Hipotesis Tiempo de Desplazamiento a la Universidad")
+hypothesis_t(time_u$col, my_mean,"Hipotesis Tiempo de Desplazamiento a la Universidad")
 
 #Gastos Virtualidad
 expenses_v <- read_excel(path = dataPath,
@@ -119,6 +119,7 @@ boxplot(hobbies_p$col)
 hypothesis_t(hobbies_p$col,my_mean,"Hipotesis Tiempo Hobbies Presencialidad")
 
 #Functions
+
 #Removes the given atypical values from a given list
 remove_atypical <- function(explore, out_values, mu) {
   i = 1
@@ -135,8 +136,8 @@ remove_atypical <- function(explore, out_values, mu) {
 
 #Performs the t hypothesis on a given list with a given mean
 hypothesis_t <- function(explore, mean, hypothesis) {
-  my_t <- t.test(hobbies_p$col, mu = mean )
-  my_t
+  my_t <- t.test(explore, mu = mean )
+  print(my_t)
   p_value <- my_t$p.value
   paste(hypothesis)
   if(p_value <= 0.05) {
@@ -145,5 +146,4 @@ hypothesis_t <- function(explore, mean, hypothesis) {
     paste("No rechazar H0: media igual a ", my_mean)
   }
 }
-
 
