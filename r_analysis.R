@@ -181,4 +181,8 @@ remove_atypical <- function(explore, out_values, mu) {
   return(explore)
 }
 
+hypothesis_t <- function(explore, mu) {
+  
+}
+
 
