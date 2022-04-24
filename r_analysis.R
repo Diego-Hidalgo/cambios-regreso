@@ -119,6 +119,7 @@ boxplot(hobbies_p$col)
 hypothesis_t(hobbies_p$col,my_mean,"Hipotesis Tiempo Hobbies Presencialidad")
 
 #Functions
+#Removes the given atypical values from a given list
 remove_atypical <- function(explore, out_values, mu) {
   i = 1
   n = length(explore)
@@ -132,11 +133,12 @@ remove_atypical <- function(explore, out_values, mu) {
   return(explore)
 }
 
+#Performs the t hypothesis on a given list with a given mean
 hypothesis_t <- function(explore, mean, hypothesis) {
   my_t <- t.test(hobbies_p$col, mu = mean )
   my_t
   p_value <- my_t$p.value
-  paste(hypothesis)#Hipotesis Tiempo Hobbies Presencialidad
+  paste(hypothesis)
   if(p_value <= 0.05) {
     paste("Rechazar H0: media distinta de  ", my_mean)
   }else {
