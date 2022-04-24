@@ -19,7 +19,8 @@ library(openxlsx)
 library(PASWR2)
 library(here)
 
-dataPath <- here("inst","cambios-regreso","proyecto_it.xlsx")
+#dataPath <- here("cambios-regreso","proyecto_it.xlsx")
+dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
 #Tiempo de Desplazamiento a la Universidad
