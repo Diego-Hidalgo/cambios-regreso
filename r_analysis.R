@@ -18,7 +18,7 @@ library(descr)
 library(openxlsx)
 library(PASWR2)
 
-dataPath <- "/proyecto_it.xlsx"
+dataPath <- "proyecto_it.xlsx"
 
 dataSheet <- "Datos"
 
