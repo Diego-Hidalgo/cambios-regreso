@@ -18,8 +18,8 @@ library(descr)
 library(openxlsx)
 library(PASWR2)
 
-dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
-#dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
+#dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
+dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
 #Tiempo de Desplazamiento a la Universidad
@@ -33,17 +33,7 @@ boxplot(time_u$col)
 
 my_mean = mean(time_u$col, na.rm = TRUE)
 
-my_t <- t.test(time_u$col, mu = my_mean)
-my_t
-
-p_value <- my_t$p.value
-
-paste("Hipotesis Tiempo de Desplazamiento a la Universidad")
-if(p_value <= 0.05) {
-  paste("Rechazar H0: media distinta de ", my_mean)
-}else {
-  paste("No rechazar H0: media igual a ", my_mean)
-}
+hypothesis_t(time_u$col,my_mean,"Hipotesis Tiempo de Desplazamiento a la Universidad")
 
 #Gastos Virtualidad
 expenses_v <- read_excel(path = dataPath,
@@ -63,17 +53,8 @@ expernses_v_wa <- replace(expenses_v, expenses_v >= 8000, my_mean)
 boxplot(expernses_v_wa$col)
 
 my_mean = mean(expernses_v_wa$col, na.rm = TRUE)
-my_t <- t.test(expernses_v_wa$col, mu = my_mean)
-my_t
 
-p_value <- my_t$p.value
-
-paste("Hipotesis Gastos Virtualidad")
-if(p_value <= 0.05) {
-  paste("Rechazar H0: media distinta de ", my_mean)
-}else {
-  paste("No rechazar H0: media igual a ", my_mean)
-}
+hypothesis_t(expernses_v_wa$col,my_mean,"Hipotesis Gastos Virtualidad")
 
 #Gastos Presencialidad
 expenses_p <- read_excel(path = dataPath,
@@ -93,17 +74,7 @@ boxplot(expernses_p_wa$col)
 my_mean = mean(expernses_p_wa$col, na.rm = TRUE)
 my_mean
 
-my_t <- t.test(expernses_p_wa$col, mu = my_mean)
-my_t
-
-p_value <- my_t$p.value
-
-paste("Hipotesis Gastos Presencialidad")
-if(p_value <= 0.05) {
-  paste("Rechazar H0: media distinta de  ", my_mean)
-}else {
-  paste("No rechazar H0: media igual a ", my_mean)
-}
+hypothesis_t(expernses_p_wa$col,my_mean,"Hipotesis Gastos Presencialidad")
 
 #Tiempo Dedicado a Hobbies en la Virtualidad
 hobbies_v <- read_excel(path = dataPath,
@@ -123,17 +94,7 @@ boxplot(hobbies_v_wa$col)
 
 my_mean = mean(hobbies_v_wa$col, na.rm = TRUE)
 
-my_t <- t.test(hobbies_v_wa$col, mu = my_mean)
-my_t
-
-p_value <- my_t$p.value
-
-paste("Hipotesis Tiempo Hobbies Virtualidad")
-if(p_value <= 0.05) {
-  paste("Rechazar H0: media distinta de  ", my_mean)
-}else {
-  paste("No rechazar H0: media igual a  ", my_mean)
-}
+hypothesis_t(hobbies_v_wa$col,my_mean,"Hipotesis Tiempo Hobbies Virtualidad")
 
 #Tiempo dedicado a Hobbies en la Presencialidad
 hobbies_p <- read_excel(path = dataPath,
@@ -155,17 +116,7 @@ my_mean
 
 boxplot(hobbies_p$col)
 
-my_t <- t.test(hobbies_p$col, mu = my_mean)
-my_t
-
-p_value <- my_t$p.value
-
-paste("Hipotesis Tiempo Hobbies Presencialidad")
-if(p_value <= 0.05) {
-  paste("Rechazar H0: media distinta de  ", my_mean)
-}else {
-  paste("No rechazar H0: media igual a ", my_mean)
-}
+hypothesis_t(hobbies_p$col,my_mean,"Hipotesis Tiempo Hobbies Presencialidad")
 
 #Functions
 remove_atypical <- function(explore, out_values, mu) {
@@ -181,8 +132,16 @@ remove_atypical <- function(explore, out_values, mu) {
   return(explore)
 }
 
-hypothesis_t <- function(explore, mu) {
-  
+hypothesis_t <- function(explore, mean, hypothesis) {
+  my_t <- t.test(hobbies_p$col, mu = mean )
+  my_t
+  p_value <- my_t$p.value
+  paste(hypothesis)#Hipotesis Tiempo Hobbies Presencialidad
+  if(p_value <= 0.05) {
+    paste("Rechazar H0: media distinta de  ", my_mean)
+  }else {
+    paste("No rechazar H0: media igual a ", my_mean)
+  }
 }
 
 
