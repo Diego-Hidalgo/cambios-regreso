@@ -18,7 +18,7 @@ library(descr)
 library(openxlsx)
 library(PASWR2)
 
-dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/proyecto_it.xlsx"
+dataPath <- "/proyecto_it.xlsx"
 
 dataSheet <- "Datos"
 
