@@ -18,8 +18,8 @@ library(descr)
 library(openxlsx)
 library(PASWR2)
 
-dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
-#dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
+#dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
+dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
 #Tiempo de Desplazamiento a la Universidad
@@ -57,6 +57,11 @@ boxplot(expenses_v$col)
 boxplot.stats(expenses_v$col)$out
 
 my_mean = mean(expenses_v$col, na.rm = TRUE)
+
+expernses_v_wa <- replace(expenses_v, expenses_v >= 8000,my_mean)
+
+boxplot(expernses_v_wa$col)
+
 
 my_t <- t.test(expenses_v$col, mu = my_mean)
 my_t
