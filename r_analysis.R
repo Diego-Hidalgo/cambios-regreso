@@ -48,13 +48,13 @@ boxplot.stats(expenses_v$col)$out
 
 my_mean = mean(expenses_v$col, na.rm = TRUE)
 
-expernses_v_wa <- replace(expenses_v, expenses_v >= 8000, my_mean)
+expenses_v_wa <- replace(expenses_v, expenses_v >= 8000, my_mean)
 
-boxplot(expernses_v_wa$col)
+boxplot(expenses_v_wa$col)
 
-my_mean = mean(expernses_v_wa$col, na.rm = TRUE)
+my_mean = mean(expenses_v_wa$col, na.rm = TRUE)
 
-hypothesis_t(expernses_v_wa$col,my_mean,"Hipotesis Gastos Virtualidad")
+hypothesis_t(expenses_v_wa$col,my_mean,"Hipotesis Gastos Virtualidad")
 
 #Gastos Presencialidad
 expenses_p <- read_excel(path = dataPath,
@@ -67,14 +67,14 @@ out_values <- boxplot.stats(expenses_p$col)$out
 
 my_mean = mean(expenses_p$col, na.rm = TRUE)
 
-expernses_p_wa <- replace(expenses_p, expenses_p >= 45000, my_mean)
+expenses_p_wa <- replace(expenses_p, expenses_p >= 45000, my_mean)
 
-boxplot(expernses_p_wa$col)
+boxplot(expenses_p_wa$col)
 
-my_mean = mean(expernses_p_wa$col, na.rm = TRUE)
+my_mean = mean(expenses_p_wa$col, na.rm = TRUE)
 my_mean
 
-hypothesis_t(expernses_p_wa$col,my_mean,"Hipotesis Gastos Presencialidad")
+hypothesis_t(expenses_p_wa$col,my_mean,"Hipotesis Gastos Presencialidad")
 
 #Tiempo Dedicado a Hobbies en la Virtualidad
 hobbies_v <- read_excel(path = dataPath,
@@ -118,6 +118,12 @@ boxplot(hobbies_p$col)
 
 hypothesis_t(hobbies_p$col,my_mean,"Hipotesis Tiempo Hobbies Presencialidad")
 
+#Gastos Virtualidad - Presencialidad
+paired_means_comparison("Gastos Virtualidad", "Gastos Presencialidad", expenses_v_wa$col, expenses_p_wa$col)
+
+#Hobbies Virtualidad - Presencialidad
+paired_means_comparison("Hobbies Virtualidad", "Hobbies Presencialidad", hobbies_v_wa$col, hobbies_p$col)
+
 #Functions
 
 #Removes the given atypical values from a given list
@@ -144,6 +150,17 @@ hypothesis_t <- function(explore, mean, hypothesis) {
     paste("Rechazar H0: media distinta de  ", my_mean)
   }else {
     paste("No rechazar H0: media igual a ", my_mean)
+  }
+}
+
+paired_means_comparison <- function(x_text, y_text, x, y) {
+  my_int <- t.test(x, y, paired = TRUE)$conf.int
+  if(my_int[1] <= 0 & my_int[2] >= 0) {
+    print("Las medias son iguales")
+  } else if(my_int[1] < 0) {
+    paste("La media de ", y_text, " es mayor")
+  } else {
+    paste("La media de ", x_text, " es mayor")
   }
 }
 
