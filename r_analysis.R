@@ -22,6 +22,13 @@ dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proye
 #dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
+#Semestre
+semester <- read_excel(path = dataPath,
+                       sheet = dataSheet,
+                       range = "C2:C314",
+                       col_types = "text",
+                       col_names = "col")
+
 #Tiempo de Desplazamiento a la Universidad
 time_u <- read_excel(path = dataPath,
                      sheet = dataSheet,
@@ -125,6 +132,17 @@ residue <- residuals(regression)
 shapiro.test(residue)
 
 hypothesis_t(hobbies_p$col,my_mean,"Hipotesis Tiempo Hobbies Presencialidad")
+
+#ANOVA Varias medias, Semestre - gastos virtualidad.
+FSemester <- as.factor(semester$col)
+
+tapply(expenses_v_wa$col, FSemester, mean)
+
+anova <- aov(lm(expenses_v_wa$col~FSemester))
+
+summary(aov)
+
+TukeyHSD(anova)
 
 #Gastos Virtualidad - Presencialidad
 paired_means_comparison("Gastos Virtualidad", "Gastos Presencialidad", expenses_v_wa$col, expenses_p_wa$col)
