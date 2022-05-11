@@ -116,6 +116,14 @@ my_mean
 
 boxplot(hobbies_p$col)
 
+#Prueba Correlación Gastos Presencialidad - Tiempo Desplazamiento
+cor.test(expenses_p_wa$col, time_u$col)
+regression <- lm(expenses_p_wa$col~time_u$col)
+summary(regression)
+dwtest(regression)
+residue <- residuals(regression)
+shapiro.test(residue)
+
 hypothesis_t(hobbies_p$col,my_mean,"Hipotesis Tiempo Hobbies Presencialidad")
 
 #Gastos Virtualidad - Presencialidad
