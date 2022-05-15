@@ -33,6 +33,13 @@ library(DescTools)
 dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
+#Semestre
+semester <- read_excel(path = dataPath,
+                       sheet = dataSheet,
+                       range = "C2:C314",
+                       col_types = "text",
+                       col_names = "col")
+
 #Tiempo de Desplazamiento a la Universidad
 motivation_v <- read_excel(path = dataPath,
                            sheet = dataSheet,
@@ -67,13 +74,13 @@ boxplot.stats(expenses_v$col)$out
 
 my_mean = mean(expenses_v$col, na.rm = TRUE)
 
-expernses_v_wa <- replace(expenses_v, expenses_v >= 8000, my_mean)
+expenses_v_wa <- replace(expenses_v, expenses_v >= 8000, my_mean)
 
-boxplot(expernses_v_wa$col)
+boxplot(expenses_v_wa$col)
 
-my_mean = mean(expernses_v_wa$col, na.rm = TRUE)
+my_mean = mean(expenses_v_wa$col, na.rm = TRUE)
 
-hypothesis_t(expernses_v_wa$col,my_mean,"Hipotesis Gastos Virtualidad")
+hypothesis_t(expenses_v_wa$col,my_mean,"Hipotesis Gastos Virtualidad")
 
 #Gastos Presencialidad
 expenses_p <- read_excel(path = dataPath,
@@ -86,14 +93,14 @@ out_values <- boxplot.stats(expenses_p$col)$out
 
 my_mean = mean(expenses_p$col, na.rm = TRUE)
 
-expernses_p_wa <- replace(expenses_p, expenses_p >= 45000, my_mean)
+expenses_p_wa <- replace(expenses_p, expenses_p >= 45000, my_mean)
 
-boxplot(expernses_p_wa$col)
+boxplot(expenses_p_wa$col)
 
-my_mean = mean(expernses_p_wa$col, na.rm = TRUE)
+my_mean = mean(expenses_p_wa$col, na.rm = TRUE)
 my_mean
 
-hypothesis_t(expernses_p_wa$col,my_mean,"Hipotesis Gastos Presencialidad")
+hypothesis_t(expenses_p_wa$col,my_mean,"Hipotesis Gastos Presencialidad")
 
 #Tiempo Dedicado a Hobbies en la Virtualidad
 hobbies_v <- read_excel(path = dataPath,
@@ -134,6 +141,14 @@ my_mean <- mean(hobbies_p$col, na.rm = TRUE)
 my_mean
 
 boxplot(hobbies_p$col)
+
+#Prueba Correlación Gastos Presencialidad - Tiempo Desplazamiento
+cor.test(expenses_p_wa$col, time_u$col)
+regression <- lm(expenses_p_wa$col~time_u$col)
+summary(regression)
+dwtest(regression)
+residue <- residuals(regression)
+shapiro.test(residue)
 
 hypothesis_t(hobbies_p$col,my_mean,"Hipotesis Tiempo Hobbies Presencialidad")
 
@@ -189,7 +204,25 @@ motivacion_raw <- read_excel(path = dataPath,
                              col_names = "col")
 
 chi_square(semestre_raw$col,motivacion_raw$col)
-#####Functions
+
+#ANOVA Varias medias, Semestre - gastos virtualidad.
+FSemester <- as.factor(semester$col)
+
+tapply(expenses_v_wa$col, FSemester, mean)
+
+anova <- aov(lm(expenses_v_wa$col~FSemester))
+
+summary(aov)
+
+TukeyHSD(anova)
+
+#Gastos Virtualidad - Presencialidad
+paired_means_comparison("Gastos Virtualidad", "Gastos Presencialidad", expenses_v_wa$col, expenses_p_wa$col)
+
+#Hobbies Virtualidad - Presencialidad
+paired_means_comparison("Hobbies Virtualidad", "Hobbies Presencialidad", hobbies_v_wa$col, hobbies_p$col)
+
+#Functions
 
 #Removes the given atypical values from a given list
 remove_atypical <- function(explore, out_values, mu) {
@@ -230,3 +263,15 @@ chi_square <- function(x,y){
     paste("No se rechaza la hipotesis nula, no existe una relación entre las variables")
   }
 }
+
+paired_means_comparison <- function(x_text, y_text, x, y) {
+  my_int <- t.test(x, y, paired = TRUE)$conf.int
+  if(my_int[1] <= 0 & my_int[2] >= 0) {
+    print("Las medias son iguales")
+  } else if(my_int[1] < 0) {
+    paste("La media de ", y_text, " es mayor")
+  } else {
+    paste("La media de ", x_text, " es mayor")
+  }
+}
+
