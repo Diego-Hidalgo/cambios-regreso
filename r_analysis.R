@@ -17,12 +17,31 @@ library(lattice)
 library(descr)
 library(openxlsx)
 library(PASWR2)
+library(qrmdata)
+library(qrmtools)
+library(readxl)
+library(xts)
+library(lattice)
+library (fdth)
+library(descr)
+library(MASS)
+library(gmodels)
+library(lmtest)
+library(DescTools)
 
-dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
-#dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
+#dataPath <- "D:/5 - Quinto Semestre/Inferencia Estadistica/cambios-regreso/proyecto_it.xlsx"
+dataPath <- "D:/workspace/cambios-regreso/proyecto_it.xlsx"
 dataSheet <- "Datos"
 
 #Tiempo de Desplazamiento a la Universidad
+motivation_v <- read_excel(path = dataPath,
+                           sheet = dataSheet,
+                           range = "J2:J314",
+                           col_types = "text",
+                           col_names = "col")
+
+
+
 time_u <- read_excel(path = dataPath,
                      sheet = dataSheet,
                      range = "G2:G314",
@@ -118,6 +137,44 @@ boxplot(hobbies_p$col)
 
 hypothesis_t(hobbies_p$col,my_mean,"Hipotesis Tiempo Hobbies Presencialidad")
 
+#Regression
+plot(time_u$col,hobbies_p$col)
+cor.test(expernses_p_wa$col, time_u$col)
+Regresion <- lm(expernses_p_wa$col~time_u$col)
+summary(Regresion)
+dwtest(Regresion)
+
+#Hipotesis para la proporción
+
+#Chi cuadrado
+
+
+facultad_raw <- read_excel(path = dataPath,
+                        sheet = dataSheet,
+                        range = "B2:B314",
+                        col_types = "text",
+                        col_names = "col")
+
+motivacion_raw <- read_excel(path = dataPath,
+                       sheet = dataSheet,
+                       range = "J2:J314",
+                       col_types = "text",
+                       col_names = "col")
+
+facultad <- factor(facultad_raw$col, labels = c("CIENCIAS ADMINISTRATIVAS Y ECONÓMICAS",
+                                                "CIENCIAS DE LA SALUD","CIENCIAS NATURALES",
+                                                "DERECHO Y CIENCIAS SOCIALES","ESCUELA DE CIENCIAS DE LA EDUCACIÓN",
+                                                "INGENIERÍA"))
+barchart(facultad)
+motivacion <- factor(motivacion_raw$col, labels = c("Indiferente","	Ligeramente motivado",
+                                                    "Muy motivado","Nada motivado","Poco motivado"))
+barchart(motivacion)
+
+tabla.1 <- freq(facultad, plot = TRUE)
+tabla.2 <- freq(motivacion, plot = TRUE)
+table.3 <- crosstab(facultad)
+chisq.test(facultad_raw$col,motivacion_raw$col, correct = TRUE, p = rep(1/length(facultad_raw$col), leng(motivacion_raw$col)))
+paste("No existe una relación entre las variables")
 #Functions
 
 #Removes the given atypical values from a given list
@@ -146,4 +203,16 @@ hypothesis_t <- function(explore, mean, hypothesis) {
     paste("No rechazar H0: media igual a ", my_mean)
   }
 }
-
+#Verify if two variables have a relationship between of them
+chi_square <- function(x,y){
+  paste("H0: No existe una relación entre la facultad y la moticación para estudiar en presencialidad")
+  paste("H1: Si existe una relación")
+  ch <- chisq.test(x,y, correct = TRUE, p = rep(1/length(x),leng(y)))
+  print(ch)
+  p_value <- ch$p.value
+  if(p_value <= 0.05){
+    paste("Se rechaza la hipotesis nula, si existe una relación entre las variables")
+  }else{
+    paste("No se rechaza la hipotesis nula, no existe una relación entre las variables")
+  }
+}
