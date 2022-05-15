@@ -160,9 +160,13 @@ summary(Regresion)
 dwtest(Regresion)
 
 #Hipotesis para la proporción
-
-#Chi cuadrado
-
+#H0: p<= 0,90 los estudiantes tardan menos de 72 minutos en desplazarse a la universidad
+#H1: p > 0,90 los estudiantes tardan más de 72 minutos en desplazarse a la universidad
+x <-length(time_u$col[time_u$col<= 72])
+n <- length(time_u$col)
+p <- 0.90
+prop.test(x,n,p, alternative = "greater", conf.level = 0.95, correct = FALSE)
+#Chi cuadrado G
 
 facultad_raw <- read_excel(path = dataPath,
                         sheet = dataSheet,
