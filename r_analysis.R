@@ -173,9 +173,23 @@ barchart(motivacion)
 tabla.1 <- freq(facultad, plot = TRUE)
 tabla.2 <- freq(motivacion, plot = TRUE)
 table.3 <- crosstab(facultad)
-chisq.test(facultad_raw$col,motivacion_raw$col, correct = TRUE, p = rep(1/length(facultad_raw$col), leng(motivacion_raw$col)))
-paste("No existe una relación entre las variables")
-#Functions
+
+chi_square(facultad_raw$col,motivacion_raw$col)
+
+semestre_raw <- read_excel(path = dataPath,
+                           sheet = dataSheet,
+                           range = "C2:C314",
+                           col_types = "text",
+                           col_names = "col")
+
+motivacion_raw <- read_excel(path = dataPath,
+                             sheet = dataSheet,
+                             range = "J2:J314",
+                             col_types = "text",
+                             col_names = "col")
+
+chi_square(semestre_raw$col,motivacion_raw$col)
+#####Functions
 
 #Removes the given atypical values from a given list
 remove_atypical <- function(explore, out_values, mu) {
